@@ -5,3 +5,4 @@ forge-gas-snapshot/=lib/forge-gas-snapshot/src/
 forge-std/=lib/forge-std/src/
 hardhat/=node_modules/hardhat/
 solmate/=lib/solmate/src/
+@chimera/=lib/chimera/src/
