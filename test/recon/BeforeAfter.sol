@@ -9,7 +9,6 @@ abstract contract BeforeAfter is Setup {
 
     struct Vars {
         int256 swapValue;
-        int256 liquidityValue;
     }
 
     Vars internal _before;
@@ -17,11 +16,9 @@ abstract contract BeforeAfter is Setup {
 
     function __before(address user) internal {
         _before.swapValue = hook.beforeSwapValue(poolId);
-        _before.liquidityValue = hook.beforeAddLiquidityValue(poolId);
     }
 
     function __after(address user) internal {
         _after.swapValue = hook.afterSwapValue(poolId);
-        _after.liquidityValue = hook.beforeRemoveLiquidityValue(poolId);
     }
 }

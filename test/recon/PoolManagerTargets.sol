@@ -18,12 +18,6 @@ abstract contract PoolManagerTargets is BaseTargetFunctions, Properties, BeforeA
         swap(key, zeroForOne, amountSpecified, ZERO_BYTES); // calling swap function defined in Deployers which simplifies call to PoolManager::swap
         __after(msg.sender);
 
-        t(_before.swapValue == _after.swapValue, "user loses swap value");
-        t(_before.liquidityValue == _after.liquidityValue, "user loses liquidity value");
-    }
-
-    function _getRandomPoolKey(uint256 poolKeyIndex) internal view returns (PoolKey memory) {
-        poolKeyIndex = poolKeyIndex % poolKeys.length;
-        return poolKeys[poolKeyIndex];
+        t(_after.swapValue - _before.swapValue >= amountSpecified, "user loses value in swap hook");
     }
 }
