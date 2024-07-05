@@ -6,3 +6,5 @@ forge-std/=lib/forge-std/src/
 hardhat/=node_modules/hardhat/
 solmate/=lib/solmate/src/
 @chimera/=lib/chimera/src/
+v4-template/=lib/v4-template/src
+v4-periphery/=lib/v4-periphery/contracts
