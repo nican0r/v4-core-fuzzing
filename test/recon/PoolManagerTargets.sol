@@ -5,10 +5,6 @@ import {BaseTargetFunctions} from "@chimera/BaseTargetFunctions.sol";
 import {vm} from "@chimera/Hevm.sol";
 import "forge-std/console.sol";
 
-import {PoolKey} from "src/types/PoolKey.sol";
-import {IPoolManager} from "src/interfaces/IPoolManager.sol";
-import {BalanceDelta} from "src/types/BalanceDelta.sol";
-import {Currency, CurrencyLibrary} from "src/types/Currency.sol";
 import {BeforeAfter} from "./BeforeAfter.sol";
 import {Properties} from "./Properties.sol";
 
