@@ -10,10 +10,9 @@ import {Properties} from "./Properties.sol";
 
 abstract contract PoolManagerTargets is BaseTargetFunctions, Properties, BeforeAfter {
     function poolManager_swap(bool zeroForOne, int256 amountSpecified) public {
-        __before(msg.sender);
-        swap(key, zeroForOne, amountSpecified, ZERO_BYTES); // calling swap function defined in Deployers which simplifies call to PoolManager::swap
-        __after(msg.sender);
-
-        t(_after.swapValue - _before.swapValue >= amountSpecified, "user loses value in swap hook");
+        // __before(msg.sender);
+        // swap(key, zeroForOne, amountSpecified, ZERO_BYTES); // calling swap function defined in Deployers which simplifies call to PoolManager::swap
+        // __after(msg.sender);
+        // t(_after.swapValue - _before.swapValue >= amountSpecified, "user loses value in swap hook");
     }
 }

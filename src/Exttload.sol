@@ -9,7 +9,7 @@ abstract contract Exttload is IExttload {
     /// @inheritdoc IExttload
     function exttload(bytes32 slot) external view returns (bytes32) {
         assembly ("memory-safe") {
-            mstore(0, tload(slot))
+            mstore(0, sload(slot))
             return(0, 0x20)
         }
     }
@@ -26,11 +26,17 @@ abstract contract Exttload is IExttload {
             let end := add(0x40, shl(5, slots.length))
             let calldataptr := slots.offset
             // Return values will start at 64 while calldata offset is 68.
-            for { let memptr := 0x40 } 1 {} {
-                mstore(memptr, tload(calldataload(calldataptr)))
+            for {
+                let memptr := 0x40
+            } 1 {
+
+            } {
+                mstore(memptr, sload(calldataload(calldataptr)))
                 memptr := add(memptr, 0x20)
                 calldataptr := add(calldataptr, 0x20)
-                if iszero(lt(memptr, end)) { break }
+                if iszero(lt(memptr, end)) {
+                    break
+                }
             }
             // The end offset is also the length of the returndata.
             return(0, end)

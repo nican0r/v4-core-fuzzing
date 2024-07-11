@@ -19,14 +19,14 @@ library Reserves {
         if (value == 0) value = ZERO_BALANCE;
         bytes32 key = _getKey(currency);
         assembly {
-            tstore(key, value)
+            sstore(key, value)
         }
     }
 
     function getReserves(Currency currency) internal view returns (uint256 value) {
         bytes32 key = _getKey(currency);
         assembly {
-            value := tload(key)
+            value := sload(key)
         }
         if (value == 0) ReservesMustBeSynced.selector.revertWith();
         if (value == ZERO_BALANCE) value = 0;

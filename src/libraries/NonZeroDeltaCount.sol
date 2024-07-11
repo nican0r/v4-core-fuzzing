@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {IHooks} from "../interfaces/IHooks.sol";
 
-/// @notice This is a temporary library that allows us to use transient storage (tstore/tload)
+/// @notice This is a temporary library that allows us to use transient storage (sstore/sload)
 /// for the nonzero delta count.
 /// TODO: This library can be deleted when we have the transient keyword support in solidity.
 library NonZeroDeltaCount {
@@ -12,15 +12,15 @@ library NonZeroDeltaCount {
 
     function read() internal view returns (uint256 count) {
         assembly {
-            count := tload(NONZERO_DELTA_COUNT_SLOT)
+            count := sload(NONZERO_DELTA_COUNT_SLOT)
         }
     }
 
     function increment() internal {
         assembly {
-            let count := tload(NONZERO_DELTA_COUNT_SLOT)
+            let count := sload(NONZERO_DELTA_COUNT_SLOT)
             count := add(count, 1)
-            tstore(NONZERO_DELTA_COUNT_SLOT, count)
+            sstore(NONZERO_DELTA_COUNT_SLOT, count)
         }
     }
 
@@ -28,9 +28,9 @@ library NonZeroDeltaCount {
     /// Current usage ensures this will not happen because we call decrement with known boundaries (only up to the number of times we call increment).
     function decrement() internal {
         assembly {
-            let count := tload(NONZERO_DELTA_COUNT_SLOT)
+            let count := sload(NONZERO_DELTA_COUNT_SLOT)
             count := sub(count, 1)
-            tstore(NONZERO_DELTA_COUNT_SLOT, count)
+            sstore(NONZERO_DELTA_COUNT_SLOT, count)
         }
     }
 }

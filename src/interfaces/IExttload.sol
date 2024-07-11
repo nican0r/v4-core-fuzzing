@@ -3,12 +3,12 @@ pragma solidity >=0.8.24;
 
 interface IExttload {
     /// @notice Called by external contracts to access transient storage of the contract
-    /// @param slot Key of slot to tload
+    /// @param slot Key of slot to sload
     /// @return value The value of the slot as bytes32
     function exttload(bytes32 slot) external view returns (bytes32 value);
 
     /// @notice Called by external contracts to access sparse transient pool state
-    /// @param slots List of slots to tload
+    /// @param slots List of slots to sload
     /// @return values List of loaded values
     function exttload(bytes32[] calldata slots) external view returns (bytes32[] memory values);
 }

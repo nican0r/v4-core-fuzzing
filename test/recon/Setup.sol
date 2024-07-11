@@ -39,8 +39,26 @@ abstract contract Setup is Test, Deployers, BaseSetup {
                     Hooks.BEFORE_REMOVE_LIQUIDITY_FLAG
             ) ^ (0x4444 << 144) // Namespace the hook to avoid collisions
         );
-        deployCodeTo("Counter.sol:Counter", abi.encode(manager), flags);
+        // --- initial implementation
+        // deployCodeTo("Counter.sol:Counter", abi.encode(manager), flags);
+
+        // hook = Counter(flags);
+
+        // --- initial implementation
+
+        // ----- 2nd attempt, Lourens' method
+        // NOTE: attempting to replace use of deployCodeTo in the above implementation
+        // NOTE: this setup is borrowed from the setup for the hook template repo https://github.com/uniswapfoundation/v4-template/blob/e9bf398fdf0ec839f1e31cb03acf6cb2c5f613c5/test/Counter.t.sol#L26-L52
+        vm.etch(flags, abi.encodePacked(type(Counter).creationCode, manager));
+
+        uint256 value = 0;
+        (bool success, bytes memory runtimeBytecode) = flags.call{value: value}("");
+
+        vm.etch(flags, runtimeBytecode);
+
         hook = Counter(flags);
+        // @audit come back to this, still getting error on setup for InvalidHookResponse
+        // ------
 
         // Create the pool
         key = PoolKey(currency0, currency1, 3000, 60, IHooks(address(hook)));
@@ -53,9 +71,21 @@ abstract contract Setup is Test, Deployers, BaseSetup {
             IPoolManager.ModifyLiquidityParams(TickMath.minUsableTick(60), TickMath.maxUsableTick(60), 10_000 ether, 0),
             ZERO_BYTES
         );
+    }
 
-        // TODO: remove if no longer needed
-        poolKeys.push(key);
-        poolKeys.push(nativeKey);
+    function getCode(address target) public view returns (bytes32 code) {
+        assembly {
+            // retrieve the size of the code, this needs assembly
+            let size := extcodesize(target)
+            // allocate output byte array - this could also be done without assembly
+            // by using o_code = new bytes(size)
+            code := mload(0x40)
+            // new "memory end" including padding
+            mstore(0x40, add(code, and(add(add(size, 0x20), 0x1f), not(0x1f))))
+            // store length in memory
+            mstore(code, size)
+            // actually retrieve the code, this needs assembly
+            extcodecopy(target, add(code, 0x20), 0, size)
+        }
     }
 }
