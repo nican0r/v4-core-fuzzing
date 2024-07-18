@@ -23,15 +23,10 @@ forge install
 ```
 
 ### Fuzzing
-
-To fuzz with Medusa use the following command:
-
-``` 
-medusa fuzz
-```
-
 To fuzz with Echidna use the following command:
 
 ```
 echidna . --contract CryticTester --config echidna.yaml
 ```
+
+This repo doesn't currently support fuzzing with Medusa because it uses the `deployBytecodes` config that's unavailable in Medusa.
