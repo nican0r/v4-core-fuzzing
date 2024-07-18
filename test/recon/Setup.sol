@@ -39,26 +39,11 @@ abstract contract Setup is Test, Deployers, BaseSetup {
                     Hooks.BEFORE_REMOVE_LIQUIDITY_FLAG
             ) ^ (0x4444 << 144) // Namespace the hook to avoid collisions
         );
-        // --- initial implementation
+        // NOTE: comment this out for running Echidna because cheatcode isn't supported, use the deployBytecodes config option instead
+        // NOTE: to run foundry tests this must be uncommented
         // deployCodeTo("Counter.sol:Counter", abi.encode(manager), flags);
 
-        // hook = Counter(flags);
-
-        // --- initial implementation
-
-        // ----- 2nd attempt, Lourens' method
-        // NOTE: attempting to replace use of deployCodeTo in the above implementation
-        // NOTE: this setup is borrowed from the setup for the hook template repo https://github.com/uniswapfoundation/v4-template/blob/e9bf398fdf0ec839f1e31cb03acf6cb2c5f613c5/test/Counter.t.sol#L26-L52
-        vm.etch(flags, abi.encodePacked(type(Counter).creationCode, manager));
-
-        uint256 value = 0;
-        (bool success, bytes memory runtimeBytecode) = flags.call{value: value}("");
-
-        vm.etch(flags, runtimeBytecode);
-
         hook = Counter(flags);
-        // @audit come back to this, still getting error on setup for InvalidHookResponse
-        // ------
 
         // Create the pool
         key = PoolKey(currency0, currency1, 3000, 60, IHooks(address(hook)));
